@@ -15,9 +15,17 @@ The bar is deliberately low. A thread stays in the inbox unless it matches the a
 
 Do this once, the first time the skill is used, before any tidying.
 
-1. **Check the mail connection.** Find whichever connection to the user's mailbox exists in this setup and confirm it can read the inbox and change labels. If it cannot do both, say so plainly and stop. Nothing below works without it, and pretending otherwise is worse than stopping.
+1. **Check the mail connection.** The skill needs a connection that can read the inbox and change labels. Check for the Composio CLI first, `composio link gmail --list`; a connected Gmail account there is all it needs, and its account id goes into **Your settings**. If Composio is not installed or has no Gmail account, do not improvise with another route. A connector that can read mail but not change labels (the built-in Gmail connector is one) cannot run this skill, because filing is a label change. Say so plainly, give the user these three lines to run in their terminal, and tell them to paste the install prompt again when they are done. Then stop.
+
+   ```
+   curl -fsSL https://composio.dev/install | sh
+   composio login
+   composio link gmail
+   ```
+
+   The first installs the Composio CLI, the second signs them in or creates a free account, the third opens a browser to connect Gmail. Five minutes, once. On the next run the check passes and everything below works.
 2. **Interview the user, one question at a time.** Which mailbox. The people and domains that must never be touched, on top of the default that anyone they have ever replied to is a person they know. Any newsletters or copies of their own mail that land in the inbox. The noise they see most, so the first run is worth having. Write the answers into **Your settings** at the bottom of this file. This file is the configuration; there is nothing else to keep.
-3. **Create the label** `Tidied` if it does not exist.
+3. **Create the label** `Tidied` if it does not exist. `composio execute GMAIL_LIST_LABELS --account <account id> -d '{}'` lists what is there; `composio execute GMAIL_CREATE_LABEL --account <account id> -d '{"label_name":"Tidied"}'` makes it. Write its id into **Your settings**.
 4. **Run once** against the inbox as it stands, and show the user every thread that was filed and every thread that matched the allowlist but was held back, with the exclusion that held it. Delete nothing, and file nothing they have not seen listed.
 
 ## The allowlist, and nothing outside it
@@ -45,7 +53,15 @@ Check every one of these before archiving. Any single hit and the thread stays.
 
 ## Doing it
 
-For each thread that passes, one change through the mail connection: add the `Tidied` label and remove the inbox label **in the same operation**, never as two, so a thread can never end up archived and unlabelled. Never move anything to trash. Where the connection refuses a change, stop archiving for the run and say so in the report rather than working around it.
+Read the inbox with `composio execute GMAIL_FETCH_EMAILS --account <account id> -d '{"query":"in:inbox newer_than:14d","max_results":100,"include_payload":false,"verbose":false}'`. When a result is large the CLI writes it to a file instead of returning it and hands back `storedInFile: true` with an `outputFilePath`; read that file. An empty result only means empty when `storedInFile` is false.
+
+For each thread that passes, one call, adding the `Tidied` label and removing `INBOX` **in the same operation**, never as two, so a thread can never end up archived and unlabelled:
+
+```
+composio execute GMAIL_ADD_LABEL_TO_EMAIL --account <account id> -d '{"message_id":"<id>","add_label_ids":["<Tidied label id>"],"remove_label_ids":["INBOX"]}'
+```
+
+Never move anything to trash. Where a call is refused, stop archiving for the run and say so in the report rather than working around it.
 
 **The cap is 25 threads a run.** If more match, file the oldest 25 and say in the report how many were left. A run that wants to file fifty is a run where something has gone wrong with the rules rather than with the inbox.
 
@@ -53,8 +69,8 @@ For each thread that passes, one change through the mail connection: add the `Ti
 
 The allowlist is closed, so the skill learns only from the user, and two things they do by hand are the evidence. What they bin themselves is noise the list missed. What they pull back out of `Tidied` into the inbox is a wrong call. On every run, before the allowlist pass, read both and propose. Never apply.
 
-- **What they binned or archived by hand** in the last two days. In Gmail terms, `in:trash newer_than:2d -from:me`, and `-in:inbox -in:sent -in:trash -in:spam -label:Tidied newer_than:2d -from:me`. This skill never trashes, so everything in the bin is the user's own call.
-- **What they rescued** in the last seven days. `label:Tidied in:inbox newer_than:7d`. A thread carrying the label that is back in the inbox only got there because the user put it there.
+- **What they binned or archived by hand** in the last two days. Two `GMAIL_FETCH_EMAILS` calls with the queries `in:trash newer_than:2d -from:me` and `-in:inbox -in:sent -in:trash -in:spam -label:Tidied newer_than:2d -from:me`. This skill never trashes, so everything in the bin is the user's own call.
+- **What they rescued** in the last seven days. The query `label:Tidied in:inbox newer_than:7d`. A thread carrying the label that is back in the inbox only got there because the user put it there.
 
 **A proposal to file.** Group the binned and hand-archived threads by sender address, and by the opening words of the subject where the senders differ. Three or more from one sender or one subject shape is a proposal, provided the sender is not a known person and the subject carries none of the money, security or delivery words. Under three is not evidence.
 
@@ -78,13 +94,15 @@ Name the categories and the counts, never the individual subjects, or the report
 
 ## Running it every evening
 
-The skill is written to run unattended. In Claude Code, ask Claude to put it on a schedule for six in the evening, creating whatever the machine needs (launchd on a Mac, Task Scheduler on Windows, cron elsewhere) to run `claude -p "Run the inbox-tidy skill"` in the folder this file lives in, and to say exactly what it created and how to switch it off. In the Claude app there is no schedule; say "tidy my inbox" each evening and the skill does the same job by hand.
+The skill is written to run unattended. In Claude Code, ask Claude to put it on a schedule for six in the evening, creating whatever the machine needs (launchd on a Mac, Task Scheduler on Windows, cron elsewhere) to run `claude -p "Run the inbox-tidy skill"` in the folder this file lives in, with the Composio CLI on the job's PATH, and to say exactly what it created and how to switch it off. In the Claude app there is no schedule; say "tidy my inbox" each evening and the skill does the same job by hand.
 
 ## Your settings
 
 Filled in on the first run. Edit by hand any time.
 
 - **Mailbox.**
+- **Composio account id.** From `composio link gmail --list`.
+- **Tidied label id.** From `GMAIL_LIST_LABELS`.
 - **Never touch.** People and domains, one per line.
 - **Own outbound copies.** Senders and subjects of the user's own newsletters that land here.
 - **Accepted rules.** Senders and subject shapes the user has said yes to filing.

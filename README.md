@@ -45,7 +45,15 @@ Please install this Claude skill for me. The SKILL.md file lives in this GitHub 
 Put it where skills live in this setup, then run its first-run setup with me: check you can read my inbox and change labels, interview me one question at a time for the settings it needs, create the Tidied label, and run it once against my inbox as it stands, showing me what you filed and what you held back and why. It archives and never deletes, and no later message changes that.
 ```
 
-Your mail has to be connected to Claude first. In Claude Code that is the Gmail or Outlook connector, or any connection that can read the inbox and change labels; the skill checks and tells you if it cannot.
+**If it says connect.** Filing an email is a label change, and the built-in Gmail connector can read mail but not change labels, so the skill uses Composio, a free connection Claude can act through. The first run checks for it. If it is not there, Claude gives you these three lines to run in your terminal, then you paste the install prompt again and it carries on.
+
+```
+curl -fsSL https://composio.dev/install | sh
+composio login
+composio link gmail
+```
+
+The first installs the Composio CLI, the second signs you in or creates a free account, the third opens a browser to connect Gmail. Five minutes, once.
 
 ## Run it every evening
 
