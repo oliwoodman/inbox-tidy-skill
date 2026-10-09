@@ -32,10 +32,10 @@ Do this once, the first time the skill is used, before any tidying.
 
 A thread is archived only if it matches one of these, and only after it clears every exclusion in the next section.
 
-1. **Calendar acceptances.** Subject beginning `Accepted:` or `Tentative:`, whatever the sender. The RSVP is already on the calendar, so the email says nothing the calendar does not. This overrides the unread-from-a-human exclusion, because an acceptance is unread by definition.
+1. **Calendar acceptances:** Subject beginning `Accepted:` or `Tentative:`, whatever the sender. The RSVP is already on the calendar, so the email says nothing the calendar does not. This overrides the unread-from-a-human exclusion, because an acceptance is unread by definition.
 2. **Bulk mail the mail system has already sorted.** Where the mailbox exposes its own buckets for promotions, social notifications and mailing lists (Gmail's `CATEGORY_PROMOTIONS`, `CATEGORY_SOCIAL` and `CATEGORY_FORUMS`), anything in them. The mail system is better at filling those than a pattern here would be. This overrides the unread-from-a-human exclusion, because the bucket is the system's own judgement that no person wrote to the user. The updates bucket is not one of them.
-3. **Automated senders.** The local part of the sender's address is `no-reply`, `noreply`, `donotreply`, `do-not-reply`, `notifications`, `notification`, `mailer` or `bounce`, and the thread has no reply from the user in it.
-4. **Out-of-office auto-replies.** Subject beginning `Automatic reply:` or `Out of office`, once the thread is more than three days old. Inside three days it stays, because it may still explain a silence the user is waiting on. This overrides the unread-from-a-human exclusion, because the machine sent it and not the person.
+3. **Automated senders:** The local part of the sender's address is `no-reply`, `noreply`, `donotreply`, `do-not-reply`, `notifications`, `notification`, `mailer` or `bounce`, and the thread has no reply from the user in it.
+4. **Out-of-office auto-replies:** Subject beginning `Automatic reply:` or `Out of office`, once the thread is more than three days old. Inside three days it stays, because it may still explain a silence the user is waiting on. This overrides the unread-from-a-human exclusion, because the machine sent it and not the person.
 5. **The user's own outbound copies.** Newsletters and campaign mail they send that arrives back at this mailbox because they are on their own list, as listed in **Your settings**. Never a forward they made themselves.
 6. **Anything accepted through the learning loop**, listed under **Accepted rules** in **Your settings**.
 
@@ -43,13 +43,13 @@ A thread is archived only if it matches one of these, and only after it clears e
 
 Check every one of these before archiving. Any single hit and the thread stays.
 
-- **A person the user knows.** Anyone listed in **Your settings**, their domain, and anyone the user has ever replied to.
+- **A person the user knows:** Anyone listed in **Your settings**, their domain, and anyone the user has ever replied to.
 - **A thread the user has written into.** They replied to it once, so it is a conversation.
-- **Money.** The subject or the preview carries `invoice`, `payment`, `paid`, `receipt`, `refund`, `overdue`, `direct debit`, `card`, `renewal`, `subscription` or a currency symbol. A receipt the user cannot find is a real problem.
-- **Security and access.** `security`, `alert`, `sign-in`, `sign in`, `signed in`, `password`, `verify`, `verification`, `code`, `two-factor`, `2FA`, `suspicious`, `unusual activity`, `expiring`, `expired`, `recovery`, `access`. A security mail is the single worst thing in the inbox to lose, so this test is deliberately wider than it needs to be and a false keep costs nothing.
-- **Delivery failures.** Anything from `mailer-daemon`, or a subject carrying `undelivered`, `delivery status`, `failure notice` or `bounced`. A bounce means an email the user thinks they sent did not arrive.
-- **A cancellation or a decline.** Subject beginning `Declined:`, `Cancelled event:` or `Invitation declined`. Both leave something unbooked, which is exactly what the user needs to see.
-- **Anything unread from a human.** If the sender is not on the automated list in allowlist item 3 and the thread is unread, it stays, whatever else it matches. Allowlist items 1, 2 and 4 override this, each for the reason written into it; nothing else does.
+- **Money:** The subject or the preview carries `invoice`, `payment`, `paid`, `receipt`, `refund`, `overdue`, `direct debit`, `card`, `renewal`, `subscription` or a currency symbol. A receipt the user cannot find is a real problem.
+- **Security and access:** `security`, `alert`, `sign-in`, `sign in`, `signed in`, `password`, `verify`, `verification`, `code`, `two-factor`, `2FA`, `suspicious`, `unusual activity`, `expiring`, `expired`, `recovery`, `access`. A security mail is the single worst thing in the inbox to lose, so this test is deliberately wider than it needs to be and a false keep costs nothing.
+- **Delivery failures:** Anything from `mailer-daemon`, or a subject carrying `undelivered`, `delivery status`, `failure notice` or `bounced`. A bounce means an email the user thinks they sent did not arrive.
+- **A cancellation or a decline:** Subject beginning `Declined:`, `Cancelled event:` or `Invitation declined`. Both leave something unbooked, which is exactly what the user needs to see.
+- **Anything unread from a human:** If the sender is not on the automated list in allowlist item 3 and the thread is unread, it stays, whatever else it matches. Allowlist items 1, 2 and 4 override this, each for the reason written into it; nothing else does.
 
 ## Doing it
 
@@ -101,9 +101,9 @@ The skill is written to run unattended. In Claude Code, ask Claude to put it on 
 Filled in on the first run. Edit by hand any time.
 
 - **Mailbox.**
-- **Composio account id.** From `composio link gmail --list`.
-- **Tidied label id.** From `GMAIL_LIST_LABELS`.
+- **Composio account id:** From `composio link gmail --list`.
+- **Tidied label id:** From `GMAIL_LIST_LABELS`.
 - **Never touch.** People and domains, one per line.
 - **Own outbound copies.** Senders and subjects of the user's own newsletters that land here.
-- **Accepted rules.** Senders and subject shapes the user has said yes to filing.
-- **Proposals.** One line each, with count, date and status.
+- **Accepted rules:** Senders and subject shapes the user has said yes to filing.
+- **Proposals:** One line each, with count, date and status.
