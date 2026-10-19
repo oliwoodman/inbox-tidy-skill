@@ -2,7 +2,7 @@
 
 A Claude skill that files the definite noise out of your inbox every evening and never deletes a thing.
 
-Works in **Claude Code**, where it can run on a schedule, and in **Claude on the web** (claude.ai) by hand.
+Works in **Claude Code**, where it can run on a schedule, with Gmail connected through Composio.
 
 ---
 
@@ -45,7 +45,7 @@ Please install this Claude skill for me. The SKILL.md file lives in this GitHub 
 Put it where skills live in this setup, then run its first-run setup with me: check you can read my inbox and change labels, interview me one question at a time for the settings it needs, create the Tidied label, and run it once against my inbox as it stands, showing me what you filed and what you held back and why. It archives and never deletes, and no later message changes that.
 ```
 
-**If it says connect.** Filing an email is a label change, and the built-in Gmail connector can read mail but not change labels, so the skill uses Composio, a free connection Claude can act through. The first run checks for it. If it is not there, Claude gives you these three lines to run in your terminal, then you paste the install prompt again and it carries on.
+**If it says connect.** Filing an email is a label change, and every step of the skill makes it through Composio, a free connection Claude can act through. The first run checks for it. If it is not there, Claude gives you these three lines to run in your terminal, then you paste the install prompt again and it carries on.
 
 ```
 curl -fsSL https://composio.dev/install | sh
@@ -63,7 +63,6 @@ Once the first run looks right, paste this and Claude creates the schedule itsel
 Put the inbox-tidy skill on a schedule so it runs every evening at six without me asking, creating whatever this setup needs yourself, and tell me exactly what you created and how to switch it off. If this setup cannot run on a schedule, say so plainly and give me the one line I send each evening instead.
 ```
 
-In Claude on the web there is no schedule. Say "tidy my inbox" each evening and it does the same job by hand.
 
 ---
 
@@ -75,4 +74,4 @@ Never delete is the whole safety of this. Archived with a label is one search aw
 
 ---
 
-Built by [Oli Woodman](https://oliwoodman.com). It is the skill that runs on my own inbox every evening, with my settings taken out. More of these at [oliwoodman.com/resources](https://oliwoodman.com/resources).
+Built by [Oli Woodman](https://oliwoodman.com). It is a shorter form of the skill that runs on my own inbox each morning, with my settings taken out. More of these at [oliwoodman.com/resources](https://oliwoodman.com/resources).

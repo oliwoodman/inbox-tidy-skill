@@ -13,9 +13,9 @@ The bar is deliberately low. A thread stays in the inbox unless it matches the a
 
 ## The first run
 
-Do this once, the first time the skill is used, before any tidying.
+Do this once, the first time the skill is used, before any tidying:
 
-1. **Check the mail connection.** The skill needs a connection that can read the inbox and change labels. Check for the Composio CLI first, `composio link gmail --list`; a connected Gmail account there is all it needs, and its account id goes into **Your settings**. If Composio is not installed or has no Gmail account, do not improvise with another route. A connector that can read mail but not change labels (the built-in Gmail connector is one) cannot run this skill, because filing is a label change. Say so plainly, give the user these three lines to run in their terminal, and tell them to paste the install prompt again when they are done. Then stop.
+1. **Check the mail connection.** The skill needs a connection that can read the inbox and change labels. Check for the Composio CLI first, `composio link gmail --list`; a connected Gmail account there is all it needs, and its account id goes into **Your settings**. If Composio is not installed or has no Gmail account, do not improvise with another route, because every step below is written for the Composio CLI and filing is a label change. Say so plainly, give the user these three lines to run in their terminal, and tell them to paste the install prompt again when they are done. Then stop.
 
    ```
    curl -fsSL https://composio.dev/install | sh
@@ -30,7 +30,7 @@ Do this once, the first time the skill is used, before any tidying.
 
 ## The allowlist, and nothing outside it
 
-A thread is archived only if it matches one of these, and only after it clears every exclusion in the next section.
+A thread is archived only if it matches one of these, and only after it clears every exclusion in the next section:
 
 1. **Calendar acceptances:** Subject beginning `Accepted:` or `Tentative:`, whatever the sender. The RSVP is already on the calendar, so the email says nothing the calendar does not. This overrides the unread-from-a-human exclusion, because an acceptance is unread by definition.
 2. **Bulk mail the mail system has already sorted.** Where the mailbox exposes its own buckets for promotions, social notifications and mailing lists (Gmail's `CATEGORY_PROMOTIONS`, `CATEGORY_SOCIAL` and `CATEGORY_FORUMS`), anything in them. The mail system is better at filling those than a pattern here would be. This overrides the unread-from-a-human exclusion, because the bucket is the system's own judgement that no person wrote to the user. The updates bucket is not one of them.
@@ -41,7 +41,7 @@ A thread is archived only if it matches one of these, and only after it clears e
 
 ## Never, whatever else matches
 
-Check every one of these before archiving. Any single hit and the thread stays.
+Check every one of these before archiving. Any single hit and the thread stays:
 
 - **A person the user knows:** Anyone listed in **Your settings**, their domain, and anyone the user has ever replied to.
 - **A thread the user has written into.** They replied to it once, so it is a conversation.
@@ -67,7 +67,7 @@ Never move anything to trash. Where a call is refused, stop archiving for the ru
 
 ## Learning from the bin and the rescues
 
-The allowlist is closed, so the skill learns only from the user, and two things they do by hand are the evidence. What they bin themselves is noise the list missed. What they pull back out of `Tidied` into the inbox is a wrong call. On every run, before the allowlist pass, read both and propose. Never apply.
+The allowlist is closed, so the skill learns only from the user, and two things they do by hand are the evidence. What they bin themselves is noise the list missed. What they pull back out of `Tidied` into the inbox is a wrong call. On every run, before the allowlist pass, read both and propose. Never apply:
 
 - **What they binned or archived by hand** in the last two days. Two `GMAIL_FETCH_EMAILS` calls with the queries `in:trash newer_than:2d -from:me` and `-in:inbox -in:sent -in:trash -in:spam -label:Tidied newer_than:2d -from:me`. This skill never trashes, so everything in the bin is the user's own call.
 - **What they rescued** in the last seven days. The query `label:Tidied in:inbox newer_than:7d`. A thread carrying the label that is back in the inbox only got there because the user put it there.
@@ -98,7 +98,7 @@ The skill is written to run unattended. In Claude Code, ask Claude to put it on 
 
 ## Your settings
 
-Filled in on the first run. Edit by hand any time.
+Filled in on the first run. Edit by hand any time:
 
 - **Mailbox.**
 - **Composio account id:** From `composio link gmail --list`.
